@@ -1,0 +1,58 @@
+doctype html
+html(lang='en')
+  head
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1.0')
+    title Post an idea
+    // CSS
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+    link(href='styles/materialize.min.css', type='text/css', rel='stylesheet', media='screen,projection')
+    link(href='styles/style.css', type='text/css', rel='stylesheet', media='screen,projection')
+    script(src='https://code.jquery.com/jquery-2.1.1.min.js')
+    script(src='js/materialize.js')
+    script(src='js/init.js')
+  body
+   .row 
+      nav
+        .nav-wrapper
+          a.brand-logo(href='#!') Logo
+          a.button-collapse(href='#', data-activates='mobile-demo')
+            i.material-icons menu
+          ul.right.hide-on-med-and-down
+            li
+              a(href='sass.html') Home
+            li
+              a(href='badges.html') Vote on ideas
+            li
+              a(href='collapsible.html') Post idea
+            li
+          ul#mobile-demo.side-nav
+            li
+              a(href='sass.html') Sass
+            li
+              a(href='badges.html') Components
+            li
+              a(href='collapsible.html') Javascript
+            li
+              a(href='mobile.html') Mobile
+   .row
+      form(action='/createidea' method='post')
+        .row
+          .input-field.col.s12
+            input#password.validate(type='password')
+            label(for='password') Enter your suggestion
+        .row
+          .input-field.col.s12
+            textarea#textarea1.materialize-textarea
+            label(for='textarea1') Describe your idea...(optional)
+        .row
+          .input-field.col.s12
+            input#email.validate(type='email')
+            label(for='email') Your email address
+        .row
+          button.btn.waves-effect.waves-light.btn-large(type='submit', name='action')
+           | Submit
+           i.material-icons.right send
+
+   
+   
