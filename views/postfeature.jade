@@ -11,6 +11,10 @@ html(lang='en')
     script(src='https://code.jquery.com/jquery-2.1.1.min.js')
     script(src='js/materialize.js')
     script(src='js/init.js')
+    script.
+      $(document).ready(function() {
+      $('select').material_select();
+      });
   body
    .row 
       nav
@@ -22,37 +26,42 @@ html(lang='en')
             li
               a(href='sass.html') Home
             li
-              a(href='badges.html') Vote on ideas
-            li
-              a(href='collapsible.html') Post idea
+              a(href='allideas') All ideas
+            li.active
+              a(href='/postfeature') Post idea
             li
           ul#mobile-demo.side-nav
             li
-              a(href='sass.html') Sass
+              a(href='sass.html') Home
             li
-              a(href='badges.html') Components
+              a(href='badges.html') All ideas
+            li.active
+              a(href='/postfeature') Post idea
             li
-              a(href='collapsible.html') Javascript
-            li
-              a(href='mobile.html') Mobile
+   .input-field.col.s12
    .row
       form(action='/createidea' method='post')
         .row
           .input-field.col.s12
-            input#password.validate(type='password')
-            label(for='password') Enter your suggestion
-        .row
+            input#password.validate(type='text', name='title')
+            label(for='password') Your idea in one sentence
           .input-field.col.s12
-            textarea#textarea1.materialize-textarea
+             select(name='categories')
+                option(value='') 
+                option(value='Development') Development
+                option(value='Sales') Sales
+                option(value='Features') Features
+              label Choose category
+          .input-field.col.s12
+            textarea(name='description')#textarea1.materialize-textarea
             label(for='textarea1') Describe your idea...(optional)
-        .row
           .input-field.col.s12
-            input#email.validate(type='email')
+            input#email.validate(type='email', name='email')
             label(for='email') Your email address
-        .row
-          button.btn.waves-effect.waves-light.btn-large(type='submit', name='action')
-           | Submit
-           i.material-icons.right send
+            button.btn.waves-effect.waves-light(type='submit')
+             | Submit
+             i.material-icons.right send
+
 
    
    

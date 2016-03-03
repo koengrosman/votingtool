@@ -3,7 +3,7 @@ html(lang='en')
   head
     meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1.0')
-    title Starter Template - Materialize
+    title Post an idea
     // CSS
     link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
     link(href='styles/materialize.min.css', type='text/css', rel='stylesheet', media='screen,projection')
@@ -12,30 +12,35 @@ html(lang='en')
     script(src='js/materialize.js')
     script(src='js/init.js')
   body
-   .row
-      form.col.s12
-        .row
-          .input-field.col.s6
-            input#first_name.validate(placeholder='Placeholder', type='text')
-            label(for='first_name') First Name
-          .input-field.col.s6
-            input#last_name.validate(type='text')
-            label(for='last_name') Last Name
-        .row
-          .input-field.col.s12
-            input#disabled.validate(disabled='', value='I am not editable', type='text')
-            label(for='disabled') Disabled
-        .row
-          .input-field.col.s12
-            input#password.validate(type='password')
-            label(for='password') Password
-        .row
-          .input-field.col.s12
-            input#email.validate(type='email')
-            label(for='email') Email
-        .row
-          .input-field.col.s12
-            textarea#textarea1.materialize-textarea
-            label(for='textarea1') Textarea
-   
-   
+   .row 
+      nav
+        .nav-wrapper
+          a.brand-logo(href='#!') Logo
+          a.button-collapse(href='#', data-activates='mobile-demo')
+            i.material-icons menu
+          ul.right.hide-on-med-and-down
+            li
+              a(href='sass.html') Home
+            li.active
+              a(href='/allideas') All ideas
+            li
+              a(href='/postfeature') Post idea
+            li
+          ul#mobile-demo.side-nav
+            li
+              a(href='sass.html') Home
+            li
+              a(href='badges.html') All ideas
+            li.active
+              a(href='/postfeature') Post idea
+            li
+  .row
+   .input-field.col.s12
+    ul.collapsible(data-collapsible='accordion')
+      each val, index in data
+       li
+        .collapsible-header
+          i.material-icons filter_drama
+          p=val.title
+        .collapsible-body
+          p=val.description
