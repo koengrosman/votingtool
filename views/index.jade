@@ -5,12 +5,32 @@ html(lang='en')
     meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1.0')
     title Post an idea
     // CSS
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+
     link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
     link(href='styles/materialize.min.css', type='text/css', rel='stylesheet', media='screen,projection')
     link(href='styles/style.css', type='text/css', rel='stylesheet', media='screen,projection')
-    script(src='https://code.jquery.com/jquery-2.1.1.min.js')
     script(src='js/materialize.js')
     script(src='js/init.js')
+    script(src='/socket.io/socket.io.js')
+    script.
+      // var socket = io();
+      $( document ).ready(function(){
+      var socket = io();
+
+      $('.votebutton').click(function(){
+      var selector =  "votevalue_" + ($(this).val());
+      var currentval = $("#" + selector).text();
+      var num = parseInt(currentval) + 1
+      socket.emit('test', { my: num, selector: selector});
+      return false;
+      });
+
+      socket.on('test', function(data){
+      $("#" + data.selector).append($("#" + data.selector).text(data.my));
+      });
+
+      });
   body
    .row 
       nav
@@ -34,13 +54,15 @@ html(lang='en')
             li.active
               a(href='/postfeature') Post idea
             li
-  .row
-   .input-field.col.s12
-    ul.collapsible(data-collapsible='accordion')
+    table
       each val, index in data
-       li
-        .collapsible-header
-          i.material-icons filter_drama
-          p=val.title
-        .collapsible-body
-          p=val.description
+       tr 
+        td
+          button.btn.waves-effect.waves-light(class="votebutton" value=val.id) Vote
+            i.material-icons.right thumb_up
+        td
+            p=val.title
+        td
+           p(id='votevalue_' + val.id) 0
+           
+          

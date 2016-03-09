@@ -1,5 +1,6 @@
-var express = require('express');
-var app = express();
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var sassMiddleware = require('node-sass-middleware');
 var Sequelize = require('sequelize');
 var bodyParser = require('body-parser');
@@ -9,12 +10,9 @@ var destPath = __dirname + '/public/styles';
 var path = require('path');
 var serveStatic = require('serve-static')
 
-//middleware for using bodyparser
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
+//set the default view engine
+app.set('view engine', 'jade');
 
-//middleware for using sequalize
 var sequelize = new Sequelize('feedbackapp', 'Koen', null, {
 	host: 'localhost',
 	dialect: 'postgres',
@@ -22,6 +20,29 @@ var sequelize = new Sequelize('feedbackapp', 'Koen', null, {
 		timestamps: false
 	}
 });
+
+sequelize.sync().then(function() {
+	http.listen(3000, function(){
+  	console.log('listening on *:3000');
+});
+});
+
+
+io.on('connection', function(socket){
+    socket.on('test', function (data) {
+     io.emit('test', data);
+  });
+});
+
+
+app.get('/', function(req, res){
+	res.render('socket')
+});
+
+//middleware for using bodyparser
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
 
 //middleware for using serve static
 app.use('/',
@@ -47,10 +68,15 @@ var Idea = sequelize.define('idea', {
 //set the default view engine
 app.set('view engine', 'jade');
 
+app.get('/', function(req, res){
+	res.render('socket')
+});
+
 app.get('/allideas', function (req, res) {
 	Idea.findAll().then(function(posts) {
 		var data = posts.map(function(post) {
 			return {
+				id: post.dataValues.id,
 				title: post.dataValues.title,
 				description: post.dataValues.description,
 				email: post.dataValues.email,
@@ -81,10 +107,4 @@ app.post('/createidea', function (request, response) {
 
 app.get('/koen', function (req, res) {
   res.render('index');
-});
-
-sequelize.sync().then(function() {
-	var server = app.listen(3000, function() {
-		console.log('Example app listening on port: ' + server.address().port);
-	});
 });
