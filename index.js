@@ -21,6 +21,11 @@ var sequelize = new Sequelize('feedbackapp', 'Koen', null, {
 	}
 });
 
+var Update = sequelize.define('update', {
+	button: Sequelize.STRING,
+	number: Sequelize.INTEGER,
+});
+
 sequelize.sync().then(function() {
 	http.listen(3000, function(){
   	console.log('listening on *:3000');
@@ -30,8 +35,26 @@ sequelize.sync().then(function() {
 
 io.on('connection', function(socket){
     socket.on('test', function (data) {
-     io.emit('test', data);
+
+
+   	console.log (data)
+
+Idea.update(
+  {
+    counter: data.my
+  },
+  {
+    where: { id : data.id }
+  })
+  .then(function (result) { 
+
+  }, function(rejectedPromiseError){
+
   });
+
+    io.emit('test', data);
+  } 
+  );
 });
 
 
@@ -62,7 +85,8 @@ var Idea = sequelize.define('idea', {
 	title: Sequelize.STRING,
 	categories: Sequelize.STRING,
 	description: Sequelize.TEXT,
-	email: Sequelize.STRING
+	email: Sequelize.STRING,
+	counter: Sequelize.INTEGER
 });
 
 //set the default view engine
@@ -73,13 +97,17 @@ app.get('/', function(req, res){
 });
 
 app.get('/allideas', function (req, res) {
-	Idea.findAll().then(function(posts) {
+	Idea.findAll({
+		   limit: 100, order: [['counter', 'DESC']]
+	}).then(function(posts) {
 		var data = posts.map(function(post) {
 			return {
+				categories: post.dataValues.categories,
 				id: post.dataValues.id,
 				title: post.dataValues.title,
 				description: post.dataValues.description,
 				email: post.dataValues.email,
+				counter: post.dataValues.counter
 			};
 		});
 		res.render('index', {
@@ -99,7 +127,8 @@ app.post('/createidea', function (request, response) {
 			title: request.body.title,
 			categories: request.body.categories,
 			description: request.body.description,
-			email: request.body.email
+			email: request.body.email,
+			counter: 0
 	}).then(function(idea) {
 		response.redirect('/postfeature');
 	});

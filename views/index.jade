@@ -16,13 +16,16 @@ html(lang='en')
     script.
       // var socket = io();
       $( document ).ready(function(){
+
       var socket = io();
 
       $('.votebutton').click(function(){
       var selector =  "votevalue_" + ($(this).val());
       var currentval = $("#" + selector).text();
       var num = parseInt(currentval) + 1
-      socket.emit('test', { my: num, selector: selector});
+      var id = $(this).val()
+
+      socket.emit('test', { id: id, my: num, selector: selector});
       return false;
       });
 
@@ -31,8 +34,7 @@ html(lang='en')
       });
 
       });
-  body
-   .row 
+   .row
       nav
         .nav-wrapper
           a.brand-logo(href='#!') Logo
@@ -53,16 +55,23 @@ html(lang='en')
               a(href='badges.html') All ideas
             li.active
               a(href='/postfeature') Post idea
-            li
     table
+      thead
+        th 
+        th Categories
+        th Feedback
+        th Votes
       each val, index in data
-       tr 
-        td
-          button.btn.waves-effect.waves-light(class="votebutton" value=val.id) Vote
-            i.material-icons.right thumb_up
-        td
-            p=val.title
-        td
-           p(id='votevalue_' + val.id) 0
-           
-          
+
+    
+        tbody
+            td
+              button.btn.waves-effect.waves-light(class="votebutton" value=val.id) Vote
+                i.material-icons.right thumb_up
+            td
+                p=val.categories
+            td
+                p=val.title
+            td
+               p(id='votevalue_' + val.id)=val.counter
+        
